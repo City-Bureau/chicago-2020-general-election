@@ -71,16 +71,16 @@ input/precincts.mbtiles: input/precincts.geojson
 	--force --detect-shared-borders --coalesce-smallest-as-needed -L precincts:$< -o $@
 
 input/precincts.geojson: input/chicago-precincts.geojson input/cook-precincts.geojson
-	mapshaper -i $^ combine-files -merge-layers -simplify -o $@
+	mapshaper -i $^ combine-files -merge-layers -o $@
 
 input/chicago-precincts.geojson: input/chicago-wards.geojson
 	wget -qO - https://raw.githubusercontent.com/datamade/chicago-municipal-elections/master/precincts/2019_precincts.geojson | \
-	pipenv run python scripts/create_geojson_id.py | \
 	mapshaper -i - \
 	-clip $< \
 	-each 'TOWNSHIP="Chicago"' \
 	-each 'WARD = WARD.toString()' \
 	-each 'PRECINCT = PRECINCT.toString()' \
+	-each 'id = WARD.padStart(2, "0") + PRECINCT.padStart(3, "0")' \
 	-o $@
 
 input/cook-precincts.geojson: input/raw-cook-precincts.geojson
