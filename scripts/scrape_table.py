@@ -29,8 +29,11 @@ def get_row_values(row, ward, candidates):
     pct_values = [float(v.replace("%", "")) for v in values[2:] if "%" in v]
     return {
         "id": f"{str(ward).zfill(2)}{values[0].zfill(3)}",
+        "township": "Chicago",
         "ward": ward,
         "precinct": int(values[0]),
+        "registered": "",
+        "ballots": "",
         "total": int(values[1].replace(",", "")),
         **dict(zip(candidates, vote_values)),
         **dict(zip([f"{c} Percent" for c in candidates], pct_values)),
@@ -42,7 +45,7 @@ if __name__ == "__main__":
         html = HTML(html=f.read())
     candidates = get_candidates(html)
     columns = (
-        ["id", "ward", "precinct", "total"]
+        ["id", "township", "ward", "precinct", "registered", "ballots", "total"]
         + candidates
         + [f"{c} Percent" for c in candidates]
     )

@@ -7,3 +7,4 @@ output/*
 !output/.keep
 dist/*
 !dist/.keep
+!input/metadata.json

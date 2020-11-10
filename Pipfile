@@ -9,6 +9,7 @@ flake8 = "*"
 
 [packages]
 requests-html = "*"
+esridump = "*"
 
 [requires]
 python_version = "3.7"
