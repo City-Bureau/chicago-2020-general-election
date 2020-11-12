@@ -13,8 +13,8 @@ all: input/results-metadata.json
 
 .PHONY: deploy
 deploy:
-	aws s3 cp ./output/tiles s3://$(S3_BUCKET)/cook-2020-general-election/tiles/ --recursive --acl=public-read --cache-control "public, max-age=31536000" --size-only --content-encoding=gzip --region=us-east-1
-	aws s3 cp ./output/results/combined s3://$(S3_BUCKET)/cook-2020-general-election/results/ --acl=public-read --cache-control "public, max-age=86400, must-revalidate" --size-only --recursive --acl=public-read --region=us-east-1
+	aws s3 cp ./output/tiles s3://$(S3_BUCKET)/cook-2020-general-election/tiles/ --recursive --acl=public-read --cache-control "public, max-age=31536000" --content-encoding=gzip --region=us-east-1
+	aws s3 cp ./output/results/combined s3://$(S3_BUCKET)/cook-2020-general-election/results/ --acl=public-read --cache-control "public, max-age=86400, must-revalidate" --recursive --acl=public-read --region=us-east-1
 	aws cloudfront create-invalidation --distribution-id $(CLOUDFRONT_ID) --paths /cook-2020-general-election/*
 
 output/tiles/precincts/: input/precincts.mbtiles

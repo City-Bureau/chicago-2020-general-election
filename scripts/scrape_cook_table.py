@@ -21,11 +21,15 @@ def get_township_ward_precinct(precinct_str):
 
 def process_table(table, turnout=False):
     candidates = [th.text.strip() for th in table.find("th")][3:-1]
-    headers = (
-        ["id", "township", "ward", "precinct", "registered", "ballots"]
-        + candidates
-        + ["total"]
-    )
+    headers = [
+        "id",
+        "township",
+        "ward",
+        "precinct",
+        "registered",
+        "ballots",
+        "total",
+    ] + candidates
     rows = []
     for row in table.find("tr[align='right']")[:-1]:
         row_values = []
@@ -34,6 +38,8 @@ def process_table(table, turnout=False):
                 row_values.extend(get_township_ward_precinct(cell.text.strip()))
                 continue
             row_values.append(int(re.sub(r"\D", "", cell.text)))
+        # Reorder total column for combining later
+        row_values.insert(6, row_values.pop(-1))
         row_dict = dict(zip(headers, row_values))
         for candidate in candidates:
             if row_dict["total"] == 0:
